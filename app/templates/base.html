@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="pl-PL">
+	<head>
+		<meta charset="UTF-8">
+		{% if title %}
+        	<title>{{ title }} - Przychodnia Online</title>
+		{% else %}
+		<title>Witaj w Przychodni Online</title>
+		{% endif %}
+    	</head>
+    	<body>
+		<meta charset="UTF-8">
+        	<div>Zakładki: 
+			<a href="{{ url_for('index') }}">Strona główna</a>
+			<a href="{{ url_for('login') }}">Zaloguj</a>
+			<a href="{{ url_for('logout') }}">Wyloguj</a></div>
+        	<hr>
+		{% with messages = get_flashed_messages() %}
+        	{% if messages %}
+        	<ul>
+            		{% for message in messages %}
+            		<li>{{ message }}</li>
+            		{% endfor %}
+        	</ul>
+        	{% endif %}
+        	{% endwith %}
+        	{% block content %}{% endblock %}
+    	</body>
+</html>
