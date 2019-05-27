@@ -1,20 +1,38 @@
 ﻿<!DOCTYPE html>
 <html lang="pl-PL">
 	<head>
-		<meta charset="UTF-8">
-		{% if title %}
-        	<title>{{ title }} - Przychodnia Online</title>
-		{% else %}
-		<title>Witaj w Przychodni Online</title>
-		{% endif %}
-    	</head>
-    	<body>
-		<meta charset="UTF-8">
-        	<div>Zakładki: 
-			<a href="{{ url_for('index') }}">Strona główna</a>
-			<a href="{{ url_for('login') }}">Zaloguj</a>
-			<a href="{{ url_for('logout') }}">Wyloguj</a></div>
-        	<hr>
+    <meta charset="utf-8">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+
+    <body>
+    <div>
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark sticky-top" >
+        <ul class="navbar-nav">
+	    <li class="nav_item">
+        <a class="nav-link" href="/"> Home </a></li>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+
+    <li class="nav-item">
+      <a class="nav-link" href="/login">Login</a></li>
+      <li class="nav-item active">
+      <a class="nav-link" href="/register">Register</a></li>
+    </ul>
+</nav>
+    </div>
 		{% with messages = get_flashed_messages() %}
         	{% if messages %}
         	<ul>

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+<meta charset="UTF-8">
+{% block content %}
+    {% for item in data %}
+    <tr>
+        <td>{{item}}</td>
+    </tr>
+    {% endfor %}
+{% endblock %}

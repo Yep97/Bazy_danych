@@ -4,7 +4,7 @@ from app.forms import LoginForm
 from flask_login import current_user, login_user
 from flask_login import logout_user
 from flask_login import login_required
-from app.models import Pacjent, Lekarz
+from app.models import *
 from flask import request
 from werkzeug.urls import url_parse
 from app import db
@@ -60,10 +60,25 @@ def register():
         return redirect(url_for('index'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        pacjent = Pacjent(imie=form.imie.data, nazwisko=form.nazwisko.data, pesel=form.pesel.data, data_pw=today, data_uro=form.data_uro.data,  email=form.email.data)
+        pacjent = Pacjent(
+            imie=form.imie.data,
+            nazwisko=form.nazwisko.data,
+            pesel=form.pesel.data,
+            data_pw=today,
+            data_uro=form.data_uro.data,
+            email=form.email.data)
         pacjent.set_password(form.password.data)
         db.session.add(pacjent)
         db.session.commit()
         flash('Gratulacje zostałeś zarejestrowany!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/appointment', methods=['GET', 'POST'])
+def manage_appointments():
+    # if current_user.is_authenticated:
+    #     return redirect(url_for('index'))
+
+    data = Wizyta.query.all()
+    print(data)
+    return render_template('appointment.html', data=data)
