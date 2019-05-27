@@ -1,9 +1,40 @@
 {% extends "base.html" %}
-<meta charset="UTF-8">
 {% block content %}
-    {% for item in data %}
-    <tr>
-        <td>{{item}}</td>
-    </tr>
-    {% endfor %}
-{% endblock %}
+<html lang="en">
+  <head>
+    <!-- styles -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  </head>
+
+  <body>
+
+    <div class="page-header">
+      <h2>Pacjenci</h2>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <table class="table table-striped" id="owned_stock_table">
+          <thead>
+            <tr>
+              <th>Imie</th>
+              <th>Nazwisko</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for patient in patients %}
+            <tr>
+              <td>{{ patient.imie }}</td>
+              <td>{{ patient.nazwisko }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+     </div><!-- /.container -->
+
+    <!-- scripts -->
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+  </body>
+{% endblock content %}

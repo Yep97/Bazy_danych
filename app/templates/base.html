@@ -2,7 +2,8 @@
 <html lang="pl-PL">
 	<head>
     <meta charset="utf-8">
-<!-- Latest compiled and minified CSS -->
+<link href="{{ url_for('static', filename='syle.css') }}" rel="stylesheet" type="text/css" >
+        <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
 
 <!-- jQuery library -->
@@ -19,19 +20,29 @@
     <nav class="navbar navbar-expand-sm bg-primary navbar-dark sticky-top" >
         <ul class="navbar-nav">
 	    <li class="nav_item">
-        <a class="nav-link" href="/"> Home </a></li>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="nav-link" href="/"> Strona główna </a></li>
 
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('manage_appointments') }}">Zarządzaj wizytami</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('login') }}">Zaloguj się</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('logout') }}">Wyloguj się</a>
+        </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('register') }}">Zarejestruj się</a>
+        </li>
+        </ul>
 
-    <li class="nav-item">
-      <a class="nav-link" href="/login">Login</a></li>
-      <li class="nav-item active">
-      <a class="nav-link" href="/register">Register</a></li>
-    </ul>
-</nav>
+
+        <li class="nav-item active">
+          <a class="nav-link" href="{{ url_for('authors') }}">Autorzy</a>
+        </li>
+
+
+    </nav>
     </div>
 		{% with messages = get_flashed_messages() %}
         	{% if messages %}
@@ -43,5 +54,5 @@
         	{% endif %}
         	{% endwith %}
         	{% block content %}{% endblock %}
-    	</body>
+    </body>
 </html>

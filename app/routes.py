@@ -76,9 +76,10 @@ def register():
 
 @app.route('/appointment', methods=['GET', 'POST'])
 def manage_appointments():
-    # if current_user.is_authenticated:
-    #     return redirect(url_for('index'))
-
-    data = Wizyta.query.all()
+    data = Pacjent.query.all()
     print(data)
-    return render_template('appointment.html', data=data)
+    return render_template('appointment.html', patients=data)
+
+@app.route('/authors', methods=['GET'])
+def authors():
+    return render_template('authors.html')
