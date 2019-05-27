@@ -8,7 +8,7 @@ from app.models import *
 from flask import request
 from werkzeug.urls import url_parse
 from app import db
-from app.forms import RegistrationForm
+from app.forms import RegistrationForm, AppointmentForm
 import datetime
 
 now = datetime.datetime.now()
@@ -73,6 +73,38 @@ def register():
         flash('Gratulacje zostałeś zarejestrowany!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/patients_view', methods=['GET', 'POST'])
+def manage_appointments_for_patients():
+
+    appointments = Wizyta.query.all()
+
+    form = AppointmentForm()
+    form.placowka_id.choices =[(placowka.id,placowka.adres) for placowka in Placowka.query.all()]
+    form.finansowanie_id.choices=[(finansowanie.id,finansowanie.rodzaj) for finansowanie in Finansowanie.query.all()]
+    form.lekarz_id.choices = [(lekarz.id, lekarz.nazwisko) for lekarz in Lekarz.query.all()]
+    if form.validate_on_submit():
+        wizyta = Wizyta(
+            id = form.id.data,
+            placowka_id = form.placowka_id.data,
+            pacjent_id = form.pacjent_id.data,
+            lekarz_id = form.lekarz_id.data,
+            finansowanie_id = form.finansowanie_id.data,
+            termin = form.termin.data,
+            typ_wizyty = form.typ_wizyty.data
+        )
+
+        db.session.add(wizyta)
+        db.session.commit()
+        flash('Dodałeś wizytę')
+        return redirect(url_for('/patients_view'))
+
+
+    data = Pacjent.query.all()
+
+
+    return render_template('patients_view.html', patients=data, form=form, appointments=appointments)
+
 
 @app.route('/appointment', methods=['GET', 'POST'])
 def manage_appointments():

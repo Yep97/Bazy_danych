@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import Pacjent
 
@@ -24,3 +24,13 @@ class RegistrationForm(FlaskForm):
         pacjent = Pacjent.query.filter_by(email=email.data).first()
         if pacjent is not None:
             raise ValidationError('Podany adres email został już użyty')
+
+class AppointmentForm(FlaskForm):
+    id = StringField('ID', validators=[DataRequired()])
+    placowka_id = SelectField('placowka_id', choices=[])
+    pacjent_id = StringField('ID pacjenta', validators=[DataRequired()])
+    lekarz_id = SelectField('ID lekarza', choices=[], validators=[DataRequired()])
+    finansowanie_id = SelectField('Finansowanie',choices=[], validators=[DataRequired()])
+    termin = StringField('Termin', validators=[DataRequired()])
+    typ_wizyty = StringField('Termin', validators=[DataRequired()])
+    submit = SubmitField('Dodaj wizytę')
