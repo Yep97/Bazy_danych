@@ -1,0 +1,43 @@
+﻿	{% extends "base.html" %}
+{% block content %}
+<html lang="en">
+  <head>
+    <!-- styles -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  </head>
+
+  <body>
+
+    <div class="page-header">
+      <h2>Wizyty</h2>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <table class="table table-striped" id="owned_stock_table">
+          <thead>
+            <tr>
+              <th>ID wizyty</th>
+              <th>Termin</th>
+              <th>Typ wizyty</th>
+	      <th>Finansowanie</th>
+            </tr>
+          </thead>
+          <tbody>
+	    <tr>
+            {% for appointment in appointments %}
+              <td>{{ appointment.id }}</td>
+            {% endfor %}
+            
+            {% for appointment in appointments %}
+              <td>{{ appointment.termin  }}</td>
+              <td>{{ appointment.typ_wizyty }}</td>
+	      <td>{{ appointment.finansowanie_id }}</td>
+            {% endfor %}
+	    </tr>
+          </tbody>
+        </table>
+      </div>
+     </div><!-- /.container -->
+  </body>
+{% endblock content %}

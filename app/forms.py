@@ -32,5 +32,6 @@ class AppointmentForm(FlaskForm):
     lekarz_id = SelectField('ID lekarza', choices=[], validators=[DataRequired()])
     finansowanie_id = SelectField('Finansowanie',choices=[], validators=[DataRequired()])
     termin = StringField('Termin', validators=[DataRequired()])
-    typ_wizyty = StringField('Termin', validators=[DataRequired()])
+    typ_wizyty = StringField('Typ wizyty', validators=[DataRequired()])
     submit = SubmitField('Dodaj wizytę')
+

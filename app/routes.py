@@ -15,6 +15,9 @@ now = datetime.datetime.now()
 today = now.strftime("%Y-%m-%d")
 
 @app.route('/')
+def start_page():
+    return render_template('start_page.html')
+
 @app.route('/index')
 @login_required
 def index():
@@ -65,8 +68,10 @@ def register():
             nazwisko=form.nazwisko.data,
             pesel=form.pesel.data,
             data_pw=today,
-            data_uro=form.data_uro.data,
-            email=form.email.data)
+            data_uro=form.data_uro.data, 
+            email=form.email.data,
+            isLekarz = 0,
+            isRecepcja = 0)
         pacjent.set_password(form.password.data)
         db.session.add(pacjent)
         db.session.commit()
@@ -111,6 +116,37 @@ def manage_appointments():
     data = Pacjent.query.all()
     print(data)
     return render_template('appointment.html', patients=data)
+
+@app.route('/docs_view', methods=['GET', 'POST'])
+def manage_appointments_for_docs():
+    if current_user.isLekarz == 1:
+        appointments = Wizyta.query.all()
+
+        form = AppointmentForm()
+        form.placowka_id.choices =[(placowka.id,placowka.adres) for placowka in Placowka.query.all()]
+        form.finansowanie_id.choices=[(finansowanie.id,finansowanie.rodzaj) for finansowanie in Finansowanie.query.all()]
+        form.lekarz_id.choices = [(lekarz.id, lekarz.nazwisko) for lekarz in Lekarz.query.all()]
+        if form.validate_on_submit():
+            wizyta = Wizyta(
+                id = form.id.data,
+                placowka_id = form.placowka_id.data,
+                pacjent_id = form.pacjent_id.data,
+                lekarz_id = form.lekarz_id.data,
+                finansowanie_id = form.finansowanie_id.data,
+                termin = form.termin.data,
+                typ_wizyty = form.typ_wizyty.data
+            )
+
+            db.session.add(wizyta)
+            db.session.commit()
+            return redirect(url_for('/patients_view'))
+        
+        data = Pacjent.query.all()
+
+
+        return render_template('docs_view.html', patients=data, form=form, appointments=appointments)
+    else:
+        return render_template('index.html', title='Strona główna')
 
 @app.route('/authors', methods=['GET'])
 def authors():

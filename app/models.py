@@ -17,6 +17,8 @@ class Pacjent(UserMixin, db.Model):
     data_pw = db.Column(db.String(255), index=True, nullable=False)
     email = db.Column(db.String(255), index=True, nullable=False, unique=True)
     haslo = db.Column(db.String(128))
+    isLekarz = db.Column(db.Boolean(), index=True)
+    isRecepcja = db.Column(db.Boolean(), index=True)
 
     user_id = db.relationship('Wizyta', backref='Wizyta Pacjenta', lazy='dynamic')
 

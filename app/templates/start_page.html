@@ -1,0 +1,9 @@
+﻿{% extends "base.html" %}
+<meta charset="UTF-8">
+{% block content %}
+        <h1>Witaj w Przychodni Online!</h1>
+	<tr>Wybierz jako kto chcesz się zalogować: </tr>
+	<a button type="button" class="nav-link" href="{{ url_for('login') }}">Pacjent</button></a>
+	<a button type="button" class="nav-link" href="{{ url_for('login') }}">Lekarz</button></a>
+	<a button type="button" class="nav-link" href="{{ url_for('login') }}">Recepcja</button></a>
+{% endblock %}
