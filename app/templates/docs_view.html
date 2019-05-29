@@ -8,7 +8,16 @@
   </head>
 
   <body>
+        <h1>Wybierz, którego doktora wizyty chcesz przeglądać</h1>
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.id.label }}<br>
+                {{ form.id }}<br>
+            </p>
+            <p>{{ form.submit() }}</p>
 
+        </form>
     <div class="page-header">
       <h2>Wizyty</h2>
     </div>
@@ -28,6 +37,7 @@
 	    <tr>
               <td>{{ appointment.id }}</td>
               <td>{{ appointment.termin  }}</td>
+              <td>{{ appointment.id_pacjenta  }}</td>
               <td>{{ appointment.typ_wizyty }}</td>
 	      <td>{{ appointment.finansowanie_id }}</td>
 	    </tr>

@@ -35,6 +35,10 @@ class CreateAppointmentForm(FlaskForm):
     typ_wizyty = StringField('Typ wizyty', validators=[DataRequired()])
     submit = SubmitField('Dodaj wizytę')
 
-class registerForAppointmentForm(FlaskForm):
+class RegisterForAppointmentForm(FlaskForm):
     id = SelectField('Na którą wizytę chcesz się zapisać',coerce=int,choices=[] ,validators=[DataRequired()])
     submit = SubmitField('Zapisz mnie')
+
+class SelectDoctorToShow(FlaskForm):
+    id = SelectField('Którego doktora chcesz zobaczyć', coerce=int, choices=[], validators=[DataRequired()])
+    submit = SubmitField('Pokaż jego wizyty')

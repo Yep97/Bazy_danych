@@ -112,7 +112,7 @@ def manage_appointments_for_reception():
 
 @app.route('/patients_view', methods=['GET', 'POST'])
 def manage_appointments_for_patients():
-    form = registerForAppointmentForm()
+    form = RegisterForAppointmentForm()
     appointments2 = Wizyta.query.filter_by(pacjent_id=current_user.id)
     choicesToRegister = Wizyta.query.filter_by(pacjent_id=0).all()
     appointments2 = Wizyta.query.filter_by(pacjent_id=current_user.id)
@@ -138,28 +138,16 @@ def manage_appointments_for_docs():
     if current_user.isLekarz == 0:
         flash("Nie możesz tutaj wejść, nie jesteś lekarzem!")
         manage_appointments()
-    appointments = Wizyta.query.all()
 
-    form = CreateAppointmentForm()
-    form.placowka_id.choices =[(placowka.adres,placowka.adres) for placowka in Placowka.query.all()]
-    form.finansowanie_id.choices=[(finansowanie.id,finansowanie.rodzaj) for finansowanie in Finansowanie.query.all()]
-    form.lekarz_id.choices = [(lekarz.id, lekarz.nazwisko) for lekarz in Lekarz.query.all()]
+    form = SelectDoctorToShow()
+    form.id.choices = [(lekarz.id, lekarz.nazwisko) for lekarz in Lekarz.query.all()]
     if form.validate_on_submit():
-        wizyta = Wizyta(
-            id = form.id.data,
-            placowka_id = form.placowka_id.data,
-            pacjent_id = form.pacjent_id.data,
-            lekarz_id = form.lekarz_id.data,
-            finansowanie_id = form.finansowanie_id.data,
-            termin = form.termin.data,
-            typ_wizyty = form.typ_wizyty.data
-        )
-        db.session.add(wizyta)
-        db.session.commit()
+        thisDoctorAppointments = Wizyta.query.filter_by(lekarz_id=form.id.data)
+        return render_template('docs_view.html',form=form, appointments=thisDoctorAppointments)
+    else:
+        flash(form.errors)
 
-        
-    data = Pacjent.query.all()
-    return render_template('docs_view.html', patients=data, form=form, appointments=appointments)
+    return render_template('docs_view.html', form=form, appointments=[])
 
 @app.route('/authors', methods=['GET'])
 def authors():
