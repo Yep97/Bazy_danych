@@ -82,13 +82,13 @@ def register():
 @app.route('/patients_view', methods=['GET', 'POST'])
 def manage_appointments_for_patients():
 
-    appointments = Wizyta.query.all()
 
     form = AppointmentForm()
     form.placowka_id.choices =[(placowka.id,placowka.adres) for placowka in Placowka.query.all()]
     form.finansowanie_id.choices=[(finansowanie.id,finansowanie.rodzaj) for finansowanie in Finansowanie.query.all()]
     form.lekarz_id.choices = [(lekarz.id, lekarz.nazwisko) for lekarz in Lekarz.query.all()]
     if form.validate_on_submit():
+        print("JEstem")
         wizyta = Wizyta(
             id = form.id.data,
             placowka_id = form.placowka_id.data,
@@ -99,13 +99,14 @@ def manage_appointments_for_patients():
             typ_wizyty = form.typ_wizyty.data
         )
 
+        print(wizyta)
         db.session.add(wizyta)
         db.session.commit()
         flash('Dodałeś wizytę')
-        return redirect(url_for('/patients_view'))
 
 
     data = Pacjent.query.all()
+    appointments = Wizyta.query.all()
 
 
     return render_template('patients_view.html', patients=data, form=form, appointments=appointments)
@@ -114,7 +115,7 @@ def manage_appointments_for_patients():
 @app.route('/appointment', methods=['GET', 'POST'])
 def manage_appointments():
     data = Pacjent.query.all()
-    print(data)
+    # print(data)
     return render_template('appointment.html', patients=data)
 
 @app.route('/docs_view', methods=['GET', 'POST'])
@@ -136,7 +137,6 @@ def manage_appointments_for_docs():
                 termin = form.termin.data,
                 typ_wizyty = form.typ_wizyty.data
             )
-
             db.session.add(wizyta)
             db.session.commit()
             return redirect(url_for('/patients_view'))

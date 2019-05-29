@@ -5,9 +5,11 @@ html {
 }
 
 body {
-  max-width: 960px;
+
+  max-width: 100%;
   margin: 0 auto;
-  background: white;
+  background-image:url('Cool_Sky.jpg');
+
 }
 
 h1, h2, h3, h4, h5, h6 {
