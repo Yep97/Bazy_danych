@@ -41,12 +41,6 @@ class Lekarz(db.Model):
 
     doc_id = db.relationship('Wizyta', backref='Wizyta Lekarza', lazy='dynamic')
 
-    def set_password(self, password):
-        self.haslo = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.haslo, password)
-
     def __repr__(self):
         return '<Lekarz: {} {} {}>'.format(self.imie, self.nazwisko, self.specjalizacja)   
 
