@@ -2,7 +2,5 @@
 <meta charset="UTF-8">
 {% block content %}
         <h1>Witaj, {{ current_user.email }}!</h1>
-        {% for post in posts %}
-        <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
-        {% endfor %}
+	<h2>Przejdź do zakładki "Zarządzaj wizytami", by zapisać się na wizytę!</h2>
 {% endblock %}

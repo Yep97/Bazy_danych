@@ -17,6 +17,7 @@
         <table class="table table-striped" id="owned_stock_table">
           <thead>
             <tr>
+	      <th>ID</th>
               <th>Imie</th>
               <th>Nazwisko</th>
             </tr>
@@ -24,6 +25,7 @@
           <tbody>
             {% for patient in patients %}
             <tr>
+	      <td>{{ patient.id}}</td>
               <td>{{ patient.imie }}</td>
               <td>{{ patient.nazwisko }}</td>
             </tr>

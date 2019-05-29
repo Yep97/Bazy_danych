@@ -4,7 +4,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import Pacjent
 
 class LoginForm(FlaskForm):
-    username = StringField('Nazwa użytkownika', validators=[DataRequired()])
+    username = StringField('Adres email', validators=[DataRequired()])
     password = PasswordField('Hasło', validators=[DataRequired()])
     remember_me = BooleanField('Pamiętaj mnie')
     submit = SubmitField('Zaloguj się')
@@ -25,6 +25,11 @@ class RegistrationForm(FlaskForm):
         if pacjent is not None:
             raise ValidationError('Podany adres email został już użyty')
 
+    def validate_pesel(self, pesel):
+        pacjent = Pacjent.query.filter_by(pesel=pesel.data).first()
+        if pacjent is not None:
+            raise ValidationError('Podany PESEL został już użyty')
+
 class CreateAppointmentForm(FlaskForm):
     id = IntegerField('ID', validators=[DataRequired()])
     placowka_id = SelectField('Placowka ', choices=[], coerce=int)
@@ -34,6 +39,11 @@ class CreateAppointmentForm(FlaskForm):
     termin = DateTimeField('Termin(w formacie %Y-%m-%d %H:%M:%S)', validators=[DataRequired()])
     typ_wizyty = StringField('Typ wizyty', validators=[DataRequired()])
     submit = SubmitField('Dodaj wizytę')
+
+    def validate_id(self, id):
+        wizyta = Wizyta.query.filter_by(id=id.data).first()
+        if wizyta is not None:
+            raise ValidationError('Podane id wizyty, jest zajęte')
 
 class RegisterForAppointmentForm(FlaskForm):
     id = SelectField('Na którą wizytę chcesz się zapisać',coerce=int,choices=[] ,validators=[DataRequired()])

@@ -19,19 +19,12 @@ def start_page():
     return render_template('start_page.html')
 
 @app.route('/index')
-@login_required
+#@login_required
 def index():
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Strona główna', posts=posts)
+    posts = []
+    if current_user.is_authenticated:
+        return render_template('index.html', title='Strona główna', posts=posts)
+    return render_template('start_page.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -40,8 +33,6 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         pacjent = Pacjent.query.filter_by(email=form.username.data).first()
-        #lekarz = Lekarz.query.filter_by(email=form.username.data).first()
-        #if pacjent is None or not user.check_password(form.password.data) or lekarz is None or not user.check_password(form.password.data):
         if pacjent is None or not pacjent.check_password(form.password.data):
             flash('Niepoprawna nazwa użytkownika lub hasło')
             return redirect(url_for('login'))
@@ -80,10 +71,12 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/reception_view', methods=['GET', 'POST'])
+@login_required
 def manage_appointments_for_reception():
     if current_user.isRecepcja == 0:
-        flash("Nie jesteś z recepcji, więc nie możesz tutaj wejść!")
-        manage_appointments()
+        #flash("Nie jesteś z recepcji, więc nie możesz tutaj wejść!")
+        return render_template('not_recepetion.html')
+        #manage_appointments()
     form = CreateAppointmentForm()
     form.placowka_id.choices =[(placowka.id, placowka.adres) for placowka in Placowka.query.all()]
     form.finansowanie_id.choices=[(finansowanie.id,finansowanie.rodzaj) for finansowanie in Finansowanie.query.all()]
@@ -130,14 +123,18 @@ def manage_appointments_for_patients():
 
 @app.route('/appointment', methods=['GET', 'POST'])
 def manage_appointments():
-    data = Pacjent.query.all()
-    return render_template('appointment.html', patients=data)
+    if current_user.is_authenticated:
+        data = Pacjent.query.all()
+        return render_template('appointment.html', patients=data)
+    return render_template('start_page.html')
+    
 
 @app.route('/docs_view', methods=['GET', 'POST'])
 def manage_appointments_for_docs():
     if current_user.isLekarz == 0:
-        flash("Nie możesz tutaj wejść, nie jesteś lekarzem!")
-        manage_appointments()
+        #flash("Nie możesz tutaj wejść, nie jesteś lekarzem!")
+        #manage_appointments()
+        return render_template('not_doc.html')
 
     form = SelectDoctorToShow()
     form.id.choices = [(lekarz.id, lekarz.nazwisko) for lekarz in Lekarz.query.all()]

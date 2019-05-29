@@ -5,8 +5,7 @@ from flask_login import UserMixin
 @login.user_loader
 def load_pacjent(id):
     return Pacjent.query.get(int(id))
-def load_lekarz(id):
-    return Lekarz.query.get(int(id))
+
 
 class Pacjent(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
@@ -31,7 +30,7 @@ class Pacjent(UserMixin, db.Model):
     def __repr__(self):
         return '<Pacjent: {} {}>'.format(self.imie, self.nazwisko)   
 
-class Lekarz(UserMixin, db.Model):
+class Lekarz(db.Model):
     id = db.Column(db.Integer, primary_key=True, unique=True)
     imie = db.Column(db.String(255), index=True, nullable=False)
     nazwisko = db.Column(db.String(255), index=True, nullable=False)
@@ -39,8 +38,6 @@ class Lekarz(UserMixin, db.Model):
     cena = db.Column(db.Float(4), index=True, nullable=False)
     godzina_str = db.Column(db.String(255), index=True, nullable=False)
     godzina_kon = db.Column(db.String(255), index=True, nullable=False)
-    email = db.Column(db.String(255), index=True, unique=True, nullable=False)
-    haslo = db.Column(db.String(128))
 
     doc_id = db.relationship('Wizyta', backref='Wizyta Lekarza', lazy='dynamic')
 
