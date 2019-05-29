@@ -83,4 +83,4 @@ class Wizyta(db.Model):
     typ_wizyty = db.Column(db.String(255), index=True, nullable=False)
 
     def __repr__(self):
-        return '<Wizyta: {} {} {} {} {} {}>'.format(self.placowka, self. pacjent, self.lekarz, self.finansowanie, self.termin, self.typ_wizyty)  
+        return '<Wizyta: {} {} {} {} {} {}>'.format(self.placowka_id, self. pacjent_id, self.lekarz_id, self.finansowanie_id, self.termin, self.typ_wizyty)

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import IntegerField, StringField, PasswordField, BooleanField, SubmitField, SelectField, DateField, DateTimeField, TimeField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models import Pacjent
 
@@ -25,13 +25,16 @@ class RegistrationForm(FlaskForm):
         if pacjent is not None:
             raise ValidationError('Podany adres email został już użyty')
 
-class AppointmentForm(FlaskForm):
-    id = StringField('ID', validators=[DataRequired()])
-    placowka_id = SelectField('placowka_id', choices=[])
-    pacjent_id = StringField('ID pacjenta', validators=[DataRequired()])
-    lekarz_id = SelectField('ID lekarza', choices=[], validators=[DataRequired()])
-    finansowanie_id = SelectField('Finansowanie',choices=[], validators=[DataRequired()])
-    termin = StringField('Termin', validators=[DataRequired()])
+class CreateAppointmentForm(FlaskForm):
+    id = IntegerField('ID', validators=[DataRequired()])
+    placowka_id = SelectField('Placowka ', choices=[], coerce=int)
+    pacjent_id = StringField('ID pacjenta', validators=[DataRequired()] )
+    lekarz_id = SelectField('Lekarz', choices=[], validators=[DataRequired()], coerce=int)
+    finansowanie_id = SelectField('Finansowanie',choices=[], validators=[DataRequired()], coerce=int)
+    termin = DateTimeField('Termin(w formacie %Y-%m-%d %H:%M:%S)', validators=[DataRequired()])
     typ_wizyty = StringField('Typ wizyty', validators=[DataRequired()])
     submit = SubmitField('Dodaj wizytę')
 
+class registerForAppointmentForm(FlaskForm):
+    id = SelectField('Na którą wizytę chcesz się zapisać',coerce=int,choices=[] ,validators=[DataRequired()])
+    submit = SubmitField('Zapisz mnie')

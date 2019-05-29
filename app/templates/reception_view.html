@@ -1,0 +1,123 @@
+﻿{% extends "base.html" %}
+{% block content %}
+<html lang="en">
+  <head>
+    <!-- styles -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  </head>
+
+  <body>
+
+    <div class="page-header">
+      <h2>Pacjenci</h2>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <table class="table table-striped" id="owned_stock_table">
+          <thead>
+            <tr>
+              <th>Imie</th>
+              <th>Nazwisko</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for patient in patients %}
+            <tr>
+              <td>{{ patient.imie }}</td>
+              <td>{{ patient.nazwisko }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+     </div><!-- /.container -->
+
+    <!-- scripts -->
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <h3> Dodaj wizytę</h3>
+      <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.id.label }}<br>
+            {{ form.id(size=32) }}<br>
+            {% for error in form.id.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.placowka_id.label }}<br>
+            {{ form.placowka_id }}<br>
+            {% for error in form.pacjent_id.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.pacjent_id.label }}<br>
+            {{ form.pacjent_id(size=32) }}<br>
+            {% for error in form.pacjent_id.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.lekarz_id.label }}<br>
+            {{ form.lekarz_id }}<br>
+        </p>
+        <p>
+            {{ form.finansowanie_id.label }}<br>
+            {{ form.finansowanie_id }}<br>
+        </p>
+        <p>
+            {{ form.termin.label }}<br>
+            {{ form.termin(size=32) }}<br>
+            {% for error in form.termin.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.typ_wizyty.label }}<br>
+            {{ form.typ_wizyty(size=32) }}<br>
+            {% for error in form.typ_wizyty.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+
+
+    <div class="page-header">
+      <h2>Wizyty</h2>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <table class="table table-striped" id="owned_stock_table">
+          <thead>
+            <tr>
+              <th>ID wizyty</th>
+              <th>ID placówki</th>
+              <th>ID pacjenta</th>
+              <th>ID lekarza</th>
+              <th>Termin</th>
+              <th>Typ wizyty</th>
+              <th>Finansowanie</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appointment in appointments %}
+            <tr>
+              <td>{{ appointment.id }}</td>
+              <td>{{ appointment.placowka_id }}</td>
+              <td>{{ appointment.pacjent_id }}</td>
+              <td>{{ appointment.lekarz_id }}</td>
+              <td>{{ appointment.termin  }}</td>
+              <td>{{ appointment.typ_wizyty }}</td>
+              <td>{{ appointment.finansowanie_id}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+     </div><!-- /.container -->
+  </body>
+{% endblock content %}

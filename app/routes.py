@@ -8,7 +8,7 @@ from app.models import *
 from flask import request
 from werkzeug.urls import url_parse
 from app import db
-from app.forms import RegistrationForm, AppointmentForm
+from app.forms import *
 import datetime
 
 now = datetime.datetime.now()
@@ -79,16 +79,72 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/patients_view', methods=['GET', 'POST'])
-def manage_appointments_for_patients():
-
-
-    form = AppointmentForm()
-    form.placowka_id.choices =[(placowka.id,placowka.adres) for placowka in Placowka.query.all()]
+@app.route('/reception_view', methods=['GET', 'POST'])
+def manage_appointments_for_reception():
+    if current_user.isRecepcja == 0:
+        flash("Nie jesteś z recepcji, więc nie możesz tutaj wejść!")
+        manage_appointments()
+    form = CreateAppointmentForm()
+    form.placowka_id.choices =[(placowka.id, placowka.adres) for placowka in Placowka.query.all()]
     form.finansowanie_id.choices=[(finansowanie.id,finansowanie.rodzaj) for finansowanie in Finansowanie.query.all()]
     form.lekarz_id.choices = [(lekarz.id, lekarz.nazwisko) for lekarz in Lekarz.query.all()]
     if form.validate_on_submit():
-        print("JEstem")
+        wizyta = Wizyta(
+            id = form.id.data,
+            placowka_id =form.placowka_id.data,
+            pacjent_id = form.pacjent_id.data,
+            lekarz_id = form.lekarz_id.data,
+            finansowanie_id = form.finansowanie_id.data,
+            termin = form.termin.data,
+            typ_wizyty = form.typ_wizyty.data
+        )
+        print(wizyta)
+        db.session.add(wizyta)
+        db.session.commit()
+        flash('Dodałeś wizytę')
+    else:
+        print(form.lekarz_id.data)
+        print(form.errors)
+
+    data = Pacjent.query.all()
+    appointments = Wizyta.query.all()
+    return render_template('reception_view.html', patients=data, form=form, appointments=appointments)
+
+@app.route('/patients_view', methods=['GET', 'POST'])
+def manage_appointments_for_patients():
+    form = registerForAppointmentForm()
+    appointments2 = Wizyta.query.filter_by(pacjent_id=current_user.id)
+    choicesToRegister = Wizyta.query.filter_by(pacjent_id=0).all()
+    appointments2 = Wizyta.query.filter_by(pacjent_id=current_user.id)
+    form.id.choices = [(appointment.id, appointment.id)for appointment in choicesToRegister]
+
+    if form.validate_on_submit():
+        chosenAppointment = Wizyta.query.filter_by(id=form.id.data).first()
+        chosenAppointment.pacjent_id = current_user.id
+        db.session.commit()
+        manage_appointments_for_patients()
+
+    return render_template('patients_view.html', form=form,
+                           appointmentsToChoose=choicesToRegister,
+                           appointmentsThisPatientRegistrated=appointments2)
+
+@app.route('/appointment', methods=['GET', 'POST'])
+def manage_appointments():
+    data = Pacjent.query.all()
+    return render_template('appointment.html', patients=data)
+
+@app.route('/docs_view', methods=['GET', 'POST'])
+def manage_appointments_for_docs():
+    if current_user.isLekarz == 0:
+        flash("Nie możesz tutaj wejść, nie jesteś lekarzem!")
+        manage_appointments()
+    appointments = Wizyta.query.all()
+
+    form = CreateAppointmentForm()
+    form.placowka_id.choices =[(placowka.adres,placowka.adres) for placowka in Placowka.query.all()]
+    form.finansowanie_id.choices=[(finansowanie.id,finansowanie.rodzaj) for finansowanie in Finansowanie.query.all()]
+    form.lekarz_id.choices = [(lekarz.id, lekarz.nazwisko) for lekarz in Lekarz.query.all()]
+    if form.validate_on_submit():
         wizyta = Wizyta(
             id = form.id.data,
             placowka_id = form.placowka_id.data,
@@ -98,55 +154,12 @@ def manage_appointments_for_patients():
             termin = form.termin.data,
             typ_wizyty = form.typ_wizyty.data
         )
-
-        print(wizyta)
         db.session.add(wizyta)
         db.session.commit()
-        flash('Dodałeś wizytę')
 
-
-    data = Pacjent.query.all()
-    appointments = Wizyta.query.all()
-
-
-    return render_template('patients_view.html', patients=data, form=form, appointments=appointments)
-
-
-@app.route('/appointment', methods=['GET', 'POST'])
-def manage_appointments():
-    data = Pacjent.query.all()
-    # print(data)
-    return render_template('appointment.html', patients=data)
-
-@app.route('/docs_view', methods=['GET', 'POST'])
-def manage_appointments_for_docs():
-    if current_user.isLekarz == 1:
-        appointments = Wizyta.query.all()
-
-        form = AppointmentForm()
-        form.placowka_id.choices =[(placowka.id,placowka.adres) for placowka in Placowka.query.all()]
-        form.finansowanie_id.choices=[(finansowanie.id,finansowanie.rodzaj) for finansowanie in Finansowanie.query.all()]
-        form.lekarz_id.choices = [(lekarz.id, lekarz.nazwisko) for lekarz in Lekarz.query.all()]
-        if form.validate_on_submit():
-            wizyta = Wizyta(
-                id = form.id.data,
-                placowka_id = form.placowka_id.data,
-                pacjent_id = form.pacjent_id.data,
-                lekarz_id = form.lekarz_id.data,
-                finansowanie_id = form.finansowanie_id.data,
-                termin = form.termin.data,
-                typ_wizyty = form.typ_wizyty.data
-            )
-            db.session.add(wizyta)
-            db.session.commit()
-            return redirect(url_for('/patients_view'))
         
-        data = Pacjent.query.all()
-
-
-        return render_template('docs_view.html', patients=data, form=form, appointments=appointments)
-    else:
-        return render_template('index.html', title='Strona główna')
+    data = Pacjent.query.all()
+    return render_template('docs_view.html', patients=data, form=form, appointments=appointments)
 
 @app.route('/authors', methods=['GET'])
 def authors():

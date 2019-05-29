@@ -24,17 +24,14 @@
             </tr>
           </thead>
           <tbody>
+            {% for appointment in appointments %}
 	    <tr>
-            {% for appointment in appointments %}
               <td>{{ appointment.id }}</td>
-            {% endfor %}
-            
-            {% for appointment in appointments %}
               <td>{{ appointment.termin  }}</td>
               <td>{{ appointment.typ_wizyty }}</td>
 	      <td>{{ appointment.finansowanie_id }}</td>
-            {% endfor %}
 	    </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
