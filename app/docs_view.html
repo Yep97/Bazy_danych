@@ -27,7 +27,8 @@
           <thead>
             <tr>
               <th>ID wizyty</th>
-              <th>Termin</th>
+	      <th>Termin</th>
+	      <th>ID pacjenta</th>
               <th>Typ wizyty</th>
 	      <th>Finansowanie</th>
             </tr>
@@ -37,7 +38,7 @@
 	    <tr>
               <td>{{ appointment.id }}</td>
               <td>{{ appointment.termin  }}</td>
-              <td>{{ appointment.id_pacjenta  }}</td>
+              <td>{{ appointment.pacjent_id  }}</td>
               <td>{{ appointment.typ_wizyty }}</td>
 	      <td>{{ appointment.finansowanie_id }}</td>
 	    </tr>
