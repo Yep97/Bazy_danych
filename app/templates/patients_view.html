@@ -73,6 +73,15 @@
         </table>
       </div>
      </div><!-- /.container -->
+       <h3>Jeśli chcesz się wypisać, wybierz przycisk poniżej</h3>
+        <form action="" method="POST">
+            {{ form2.hidden_tag() }}
+            <p>
+                {{ form2.id.label }}<br>
+                {{ form2.id }}<br>
+            </p>
+            <p>{{ form2.submit() }}</p>
+        </form>
 
   </body>
 {% endblock content %}

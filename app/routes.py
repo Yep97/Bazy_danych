@@ -111,13 +111,18 @@ def manage_appointments_for_patients():
     appointments2 = Wizyta.query.filter_by(pacjent_id=current_user.id)
     form.id.choices = [(appointment.id, appointment.id)for appointment in choicesToRegister]
 
+    form2 = RegisterForAppointmentForm()
+    form2.id.choices = [(appointment.id,appointment.id) for appointment in appointments2]
     if form.validate_on_submit():
         chosenAppointment = Wizyta.query.filter_by(id=form.id.data).first()
         chosenAppointment.pacjent_id = current_user.id
         db.session.commit()
-        manage_appointments_for_patients()
+    if form2.validate_on_submit():
+        chosenAppointment = Wizyta.query.filter_by(id=form2.id.data).first()
+        chosenAppointment.pacjent_id = 0
+        db.session.commit()
 
-    return render_template('patients_view.html', form=form,
+    return render_template('patients_view.html', form=form, form2=form2,
                            appointmentsToChoose=choicesToRegister,
                            appointmentsThisPatientRegistrated=appointments2)
 
