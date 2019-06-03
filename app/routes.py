@@ -16,14 +16,16 @@ today = now.strftime("%Y-%m-%d")
 
 @app.route('/')
 def start_page():
-    return render_template('start_page.html')
+    if current_user.is_authenticated:
+        return render_template('index.html', title='Strona główna')
+    else:
+        return render_template('start_page.html')
 
 @app.route('/index')
 #@login_required
 def index():
-    posts = []
     if current_user.is_authenticated:
-        return render_template('index.html', title='Strona główna', posts=posts)
+        return render_template('index.html', title='Strona główna')
     return render_template('start_page.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -106,12 +108,12 @@ def manage_appointments_for_reception():
 @app.route('/patients_view', methods=['GET', 'POST'])
 def manage_appointments_for_patients():
     form = RegisterForAppointmentForm()
-    appointments2 = Wizyta.query.filter_by(pacjent_id=current_user.id)
+    #appointments2 = Wizyta.query.filter_by(pacjent_id=current_user.id).all()
     choicesToRegister = Wizyta.query.filter_by(pacjent_id=0).all()
     appointments2 = Wizyta.query.filter_by(pacjent_id=current_user.id)
     form.id.choices = [(appointment.id, appointment.id)for appointment in choicesToRegister]
 
-    form2 = RegisterForAppointmentForm()
+    form2 = RemoveAppointmentForm()
     form2.id.choices = [(appointment.id,appointment.id) for appointment in appointments2]
     if form.validate_on_submit():
         chosenAppointment = Wizyta.query.filter_by(id=form.id.data).first()

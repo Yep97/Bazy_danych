@@ -1,4 +1,4 @@
-﻿	{% extends "base.html" %}
+﻿{% extends "base.html" %}
 {% block content %}
 <html lang="en">
   <head>
@@ -22,12 +22,13 @@
       <h2>Wizyty</h2>
     </div>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-auto">
         <table class="table table-striped" id="owned_stock_table">
           <thead>
             <tr>
               <th>ID wizyty</th>
-              <th>Termin</th>
+	      <th>Termin</th>
+	      <th>ID pacjenta</th>
               <th>Typ wizyty</th>
 	      <th>Finansowanie</th>
             </tr>
@@ -37,7 +38,7 @@
 	    <tr>
               <td>{{ appointment.id }}</td>
               <td>{{ appointment.termin  }}</td>
-              <td>{{ appointment.id_pacjenta  }}</td>
+              <td>{{ appointment.pacjent_id  }}</td>
               <td>{{ appointment.typ_wizyty }}</td>
 	      <td>{{ appointment.finansowanie_id }}</td>
 	    </tr>

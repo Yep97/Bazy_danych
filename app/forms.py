@@ -10,15 +10,15 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Zaloguj się')
 
 class RegistrationForm(FlaskForm):
-    imie = StringField('Imie', validators=[DataRequired()])
+    imie = StringField('Imię', validators=[DataRequired()])
     nazwisko = StringField('Nazwisko', validators=[DataRequired()])
     pesel = StringField('PESEL', validators=[DataRequired()])
     data_uro = StringField('Data urodzenia', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
+    password = PasswordField('Hasło', validators=[DataRequired()])
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
+        'Powtórz hasło', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Zarejestruj się')
 
     def validate_email(self, email):
         pacjent = Pacjent.query.filter_by(email=email.data).first()
@@ -46,8 +46,12 @@ class CreateAppointmentForm(FlaskForm):
             raise ValidationError('Podane id wizyty, jest zajęte')
 
 class RegisterForAppointmentForm(FlaskForm):
-    id = SelectField('Na którą wizytę chcesz się zapisać',coerce=int,choices=[] ,validators=[DataRequired()])
+    id = SelectField('Na którą wizytę chcesz się zapisać?',coerce=int,choices=[] ,validators=[DataRequired()])
     submit = SubmitField('Zapisz mnie')
+
+class RemoveAppointmentForm(FlaskForm):
+    id = SelectField('Z której wizyty chcesz się wypisać?',coerce=int,choices=[] ,validators=[DataRequired()])
+    submit = SubmitField('Wypisz mnie')
 
 class SelectDoctorToShow(FlaskForm):
     id = SelectField('Którego doktora chcesz zobaczyć', coerce=int, choices=[], validators=[DataRequired()])
